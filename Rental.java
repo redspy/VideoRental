@@ -1,15 +1,25 @@
 import java.util.Date;
 
 public class Rental {
+    private Customer customer;
     private Video video;
     private RentalStatus status; // 0 for Rented, 1 for Returned
     private Date rentDate;
     private Date returnDate;
 
-    public Rental(Video video) {
+    public Rental(Customer customer, Video video) {
+        this.customer = customer;
         this.video = video;
         status = RentalStatus.RETURNED;
         rentDate = new Date();
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Video getVideo() {
@@ -65,7 +75,7 @@ public class Rental {
     }
 
     public int getDaysRented() {
-        long diff;
+        long diff = 0;
         if (getStatus() == RentalStatus.RETURNED) { // returned Video
             diff = this.getReturnDate().getTime() - this.getRentDate().getTime();
         } else { // not yet returned

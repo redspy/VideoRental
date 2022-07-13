@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class VRUI {
@@ -55,9 +56,10 @@ public class VRUI {
         if (foundCustomer == null) {
             System.out.println("No customer found");
         } else {
+            List<Rental> rentals = vr.getRentalsOfCustomer(foundCustomer);
             System.out.println("Name: " + foundCustomer.getName() +
-                    "\tRentals: " + foundCustomer.getRentals().size());
-            for (Rental rental : foundCustomer.getRentals()) {
+                    "\tRentals: " + rentals.size());
+            for (Rental rental : rentals) {
                 System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ");
                 System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode());
             }
@@ -101,11 +103,13 @@ public class VRUI {
     public void listCustomers() {
         System.out.println("List of customers");
         for (Customer customer : vr.getCustomers()) {
+            List<Rental> rentals = vr.getRentalsOfCustomer(customer);
             System.out.println("Name: " + customer.getName() +
-                    "\tRentals: " + customer.getRentals().size());
-            for (Rental rental : customer.getRentals()) {
+                    "\tRentals: " + rentals.size());
+            for (Rental rental : rentals) {
                 System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ");
                 System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode());
+                System.out.print("\n");
             }
         }
         System.out.println("End of list");

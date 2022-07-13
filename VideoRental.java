@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class VideoRental {
     private List<Customer> customers = new ArrayList<>();
     private List<Video> videos = new ArrayList<>();
+    private Map<Customer, List<Rental>> rentalsOfCustomer = new HashMap<>();
 
     public Video registerVideo(String title, VideoType videoType, PriceCode priceCode) {
         Date today = new Date();
@@ -17,6 +16,7 @@ public class VideoRental {
     public Customer registerCustomer(String name) {
         Customer customer = new Customer(name);
         customers.add(customer);
+        rentalsOfCustomer.put(customer, new ArrayList<>());
         return customer;
     }
 
@@ -42,19 +42,48 @@ public class VideoRental {
         return foundVideo;
     }
 
-    public Rental rentVideo(Customer foundCustomer, Video foundVideo) {
-        Rental rental = new Rental(foundVideo);
-        foundVideo.setRented(true);
+    public Rental rentVideo(Customer customer, Video video) {
+        Rental rental = new Rental(customer, video);
+        video.setRented(true);
 
-        List<Rental> customerRentals = foundCustomer.getRentals();
-        customerRentals.add(rental);
-        foundCustomer.setRentals(customerRentals);
-
+        rentalsOfCustomer.get(customer).add(rental);
         return rental;
     }
 
-    public String getCustomerReport(Customer foundCustomer) {
-        return foundCustomer.getReport();
+    public String getCustomerReport(Customer customer) {
+        String result = "Customer Report for " + customer.getName() + "\n";
+
+        List<Rental> rentals = getRentalsOfCustomer(customer);
+
+        double totalCharge = 0;
+        int totalPoint = 0;
+
+        for (Rental each : rentals) {
+            int daysRented = each.getDaysRented();
+            double eachCharge = each.getCharge();
+            int eachPoint = each.getPoint();
+
+            result += "\t" + each.getVideo().getTitle() + "\tDays rented: " + daysRented + "\tCharge: " + eachCharge
+                    + "\tPoint: " + eachPoint + "\n";
+
+            totalCharge += eachCharge;
+
+            totalPoint += eachPoint;
+        }
+
+        result += "Total charge: " + totalCharge + "\tTotal Point:" + totalPoint + "\n";
+
+        if (totalPoint >= 10) {
+            System.out.println("Congrat! You earned one free coupon");
+        }
+        if (totalPoint >= 30) {
+            System.out.println("Congrat! You earned two free coupon");
+        }
+        return result;
+    }
+
+    public List<Rental> getRentalsOfCustomer(Customer customer) {
+        return rentalsOfCustomer.get(customer);
     }
 
     public List<Customer> getCustomers() {
@@ -70,8 +99,8 @@ public class VideoRental {
         foundRental.getVideo().setRented(false);
     }
 
-    Rental findRentalByVideoTitle(Customer foundCustomer, String videoTitle) {
-        List<Rental> customerRentals = foundCustomer.getRentals();
+    Rental findRentalByVideoTitle(Customer customer, String videoTitle) {
+        List<Rental> customerRentals = getRentalsOfCustomer(customer);
         for (Rental rental : customerRentals) {
             if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
                 return rental;
@@ -80,8 +109,7 @@ public class VideoRental {
         return null;
     }
 
-    void clearRentals(Customer foundCustomer) {
-        List<Rental> rentals = new ArrayList<>();
-        foundCustomer.setRentals(rentals);
+    void clearRentals(Customer customer) {
+        getRentalsOfCustomer(customer).clear();
     }
 }
