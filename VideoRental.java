@@ -80,12 +80,12 @@ public class VideoRental {
         return videos;
     }
 
-    void returnVideo(Rental foundRental) {
+    public void returnVideo(Rental foundRental) {
         foundRental.returnVideo();
         foundRental.getVideo().setRented(false);
     }
 
-    Rental findRentalByVideoTitle(Customer customer, String videoTitle) {
+    public Rental findRentalByVideoTitle(Customer customer, String videoTitle) {
         List<Rental> customerRentals = getRentalsOfCustomer(customer);
         for (Rental rental : customerRentals) {
             if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
@@ -95,7 +95,7 @@ public class VideoRental {
         return null;
     }
 
-    void clearRentals(Customer customer) {
+    public void clearRentals(Customer customer) {
         getRentalsOfCustomer(customer).clear();
     }
 }
