@@ -75,9 +75,8 @@ public class VRUI {
     public void returnVideo() {
         Customer foundCustomer = getCustomer();
         if (foundCustomer == null) return;
-
-        System.out.println("Enter video title to return: ");
-        String videoTitle = scanner.next();
+        
+        String videoTitle = inputString("Enter video title to return: ");
 
         List<Rental> customerRentals = foundCustomer.getRentals();
         for (Rental rental : customerRentals) {
@@ -145,8 +144,7 @@ public class VRUI {
 
         if (foundCustomer == null) return;
 
-        System.out.println("Enter video title to rent: ");
-        String videoTitle = scanner.next();
+        String videoTitle = inputString("Enter video title to rent: ");
 
         Video foundVideo = null;
         for (Video video : videos) {
@@ -167,8 +165,7 @@ public class VRUI {
     }
 
     private Customer getCustomer() {
-        System.out.println("Enter customer name: ");
-        String customerName = scanner.next();
+        String customerName = inputString("Enter customer name: ");
 
         Customer foundCustomer = null;
         for (Customer customer : customers) {
@@ -181,23 +178,27 @@ public class VRUI {
     }
 
     public void registerCustomer() {
-        System.out.println("Enter customer name: ");
-        String name = scanner.next();
+        String name = inputString("Enter customer name: ");
 
         customers.add(new Customer(name));
     }
 
     public void registerVideo() {
-        System.out.println("Enter video title to register: ");
-        String title = scanner.next();
-
-        System.out.println("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
-        int videoType = scanner.nextInt();
-
-        System.out.println("Enter price code( 1 for Regular, 2 for New Release ):");
-        int priceCode = scanner.nextInt();
+        String title = inputString("Enter video title to register: ");
+        int videoType = inputInt("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
+        int priceCode = inputInt("Enter price code( 1 for Regular, 2 for New Release ):");
 
         videos.add(new Video(title, videoType, priceCode, new Date()));
+    }
+
+    private int inputInt(String message) {
+        System.out.println(message);
+        return scanner.nextInt();
+    }
+
+    private String inputString(String message) {
+        System.out.println(message);
+        return scanner.next();
     }
 
     public int showCommand() {
