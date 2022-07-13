@@ -163,8 +163,8 @@ public class VRUI {
 	{
 		System.out.println("Enter customer name: ") ;
 		String name = scanner.next();
-		Customer customer = new Customer(name) ;
-		customers.add(customer) ;
+
+		customers.add(new Customer(name)) ;
 	}
 	public void registerVideo()
 	{
@@ -177,9 +177,7 @@ public class VRUI {
 		System.out.println("Enter price code( 1 for Regular, 2 for New Release ):") ;
 		int priceCode = scanner.nextInt();
 
-		Date registeredDate = new Date();
-		Video video = new Video(title, videoType, priceCode, registeredDate) ;
-		videos.add(video) ;
+		videos.add(new Video(title, videoType, priceCode, new Date())) ;
 	}
 
 	public int showCommand() {
