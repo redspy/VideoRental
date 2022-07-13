@@ -117,13 +117,34 @@ public class VRUI {
 
     public void getCustomerReport() {
         Customer foundCustomer = inputCustomer();
-
         if (foundCustomer == null) {
             System.out.println("No customer found");
-        } else {
-            String result = vr.getCustomerReport(foundCustomer);
-            System.out.println(result);
+            return;
         }
+
+        CustomerReport report = vr.getCustomerReport(foundCustomer);
+
+        if (report.getTotalPoint() >= 10) {
+            System.out.println("Congrat! You earned one free coupon");
+        }
+        if (report.getTotalPoint() >= 30) {
+            System.out.println("Congrat! You earned two free coupon");
+        }
+
+        System.out.println("Customer Report for " + report.getCustomer().getName());
+
+        for (Rental rental : report.getRentals()) {
+            Video video = rental.getVideo();
+            System.out.print("\t" + video.getTitle());
+            System.out.print("\tDays rented: " + rental.getDaysRented());
+            System.out.print("\tCharge: " + rental.getCharge());
+            System.out.print("\tPoint: " + rental.getPoint());
+            System.out.println();
+        }
+
+        System.out.print("Total charge: " + report.getTotalCharge());
+        System.out.print("\tTotal Point: " + report.getTotalPoint());
+        System.out.println();
     }
 
     public void rentVideo() {
