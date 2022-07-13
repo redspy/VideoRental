@@ -94,8 +94,8 @@ public class VRUI {
         customers.add(james);
         customers.add(brown);
 
-        Video v1 = new Video("v1", Video.CD, Video.REGULAR, new Date());
-        Video v2 = new Video("v2", Video.DVD, Video.NEW_RELEASE, new Date());
+        Video v1 = new Video("v1", VideoType.CD, PriceCode.REGULAR, new Date());
+        Video v2 = new Video("v2", VideoType.DVD, PriceCode.NEW_RELEASE, new Date());
         videos.add(v1);
         videos.add(v2);
 
@@ -185,8 +185,11 @@ public class VRUI {
 
     public void registerVideo() {
         String title = inputString("Enter video title to register: ");
-        int videoType = inputInt("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
-        int priceCode = inputInt("Enter price code( 1 for Regular, 2 for New Release ):");
+        int videoTypeId = inputInt("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
+        int priceCodeId = inputInt("Enter price code( 1 for Regular, 2 for New Release ):");
+
+        VideoType videoType = VideoType.get(videoTypeId);
+        PriceCode priceCode = PriceCode.get(priceCodeId);
 
         videos.add(new Video(title, videoType, priceCode, new Date()));
     }

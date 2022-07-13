@@ -49,28 +49,19 @@ public class Rental {
 
     public int getDaysRentedLimit() {
         int limit = 0;
-        int daysRented;
-        if (getStatus() == RentalStatus.RETURNED) { // returned Video
-            long diff = returnDate.getTime() - rentDate.getTime();
-            daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
-        } else { // not yet returned
-            long diff = new Date().getTime() - rentDate.getTime();
-            daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
-        }
+        int daysRented = getDaysRented();
         if (daysRented <= 2) return limit;
 
         switch (video.getVideoType()) {
-            case Video.VHS:
-                limit = 5;
-                break;
-            case Video.CD:
-                limit = 3;
-                break;
-            case Video.DVD:
-                limit = 2;
-                break;
+            case VHS:
+                return 5;
+            case CD:
+                return 3;
+            case DVD:
+                return 2;
+            default:
+                throw new IllegalStateException();
         }
-        return limit;
     }
 
     public int getDaysRented() {
@@ -88,12 +79,12 @@ public class Rental {
         int daysRented = getDaysRented();
 
         switch (getVideo().getPriceCode()) {
-            case Video.REGULAR:
+            case REGULAR:
                 eachCharge += 2;
                 if (daysRented > 2)
                     eachCharge += (daysRented - 2) * 1.5;
                 break;
-            case Video.NEW_RELEASE:
+            case NEW_RELEASE:
                 eachCharge = daysRented * 3;
                 break;
         }
@@ -101,7 +92,7 @@ public class Rental {
     }
 
     public int getPoint() {
-        int bonus = (getVideo().getPriceCode() == Video.NEW_RELEASE) ? 1 : 0;
+        int bonus = (getVideo().getPriceCode() == PriceCode.NEW_RELEASE) ? 1 : 0;
         int penalty = (getDaysRented() > getDaysRentedLimit()) ? getVideo().getLateReturnPointPenalty() : 0;
         return Math.max(1 + bonus - penalty, 0);
     }
