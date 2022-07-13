@@ -21,25 +21,21 @@ public class VideoRental {
     }
 
     public Customer findCustomer(String customerName) {
-        Customer foundCustomer = null;
         for (Customer customer : customers) {
             if (customer.getName().equals(customerName)) {
-                foundCustomer = customer;
-                break;
+                return customer;
             }
         }
-        return foundCustomer;
+        return null;
     }
 
     public Video findVideo(String videoTitle) {
-        Video foundVideo = null;
         for (Video video : videos) {
-            if (video.getTitle().equals(videoTitle) && video.isRented() == false) {
-                foundVideo = video;
-                break;
+            if (video.getTitle().equals(videoTitle) && !video.isRented()) {
+                return video;
             }
         }
-        return foundVideo;
+        return null;
     }
 
     public Rental rentVideo(Customer customer, Video video) {
